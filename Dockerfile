@@ -1,4 +1,4 @@
-FROM python:3.8-slim as base
+FROM python:3.8-buster as builder
 
 ENV PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
@@ -20,11 +20,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*  
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
 
-WORKDIR $PYSETUP_PATH
-
-
-FROM base as builder
-
 COPY poetry.lock pyproject.toml ./
 
 
@@ -34,7 +29,10 @@ RUN poetry install \
     && rm -rf ~/.cache
 
 
-FROM base as development
+FROM python:3.8-slim-buster as development
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
 
 COPY --from=dev-builder /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
 COPY ./sample /app/sample
@@ -52,7 +50,10 @@ RUN poetry install --no-dev \
     && rm -rf ~/.cache
 
 
-FROM base as production
+FROM python:3.8-slim-buster as production
+
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
 
 COPY --from=prod-builder /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
 COPY ./sample /app/sample
