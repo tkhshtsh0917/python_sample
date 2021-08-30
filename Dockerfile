@@ -27,13 +27,34 @@ FROM base as builder
 
 COPY poetry.lock pyproject.toml ./
 
+
+FROM builder as dev-builder
+
+RUN poetry install \
+    && rm -rf ~/.cache
+
+
+FROM base as development
+
+COPY --from=dev-builder /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
+COPY ./sample /app/sample
+COPY ./tests /app/tests
+
+WORKDIR /app
+
+ENTRYPOINT [ "python", "-m", "pytest" ]
+
+
+
+FROM builder as prod-builder
+
 RUN poetry install --no-dev \
     && rm -rf ~/.cache
 
 
 FROM base as production
 
-COPY --from=builder /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
+COPY --from=prod-builder /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
 COPY ./sample /app/sample
 
 WORKDIR /app
