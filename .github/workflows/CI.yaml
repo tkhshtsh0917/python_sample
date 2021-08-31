@@ -15,7 +15,7 @@ jobs:
         run: docker build . --file Dockerfile --target development --tag python-sample-dev-image:latest
 
       - name: Lint Check & Testing
-        run: docker run -it --rm --name python-sample-dev-container python-sample-dev-image:latest
+        run: docker run --rm --name python-sample-dev-container python-sample-dev-image:latest
 
   build_image:
     name: Build Image
@@ -31,4 +31,4 @@ jobs:
         run: docker build . --file Dockerfile --target production --tag python-sample-prod-image:latest
 
       - name: Production Run
-        run: docker run -it --rm --name python-sample-prod-container python-sample-prod-image:latest 1 2
+        run: docker run --rm --name python-sample-prod-container python-sample-prod-image:latest 1 2
