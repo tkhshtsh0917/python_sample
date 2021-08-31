@@ -12,10 +12,6 @@ echo "exec 'python -m mypy sample tests --config-file ./mypy.ini'"
 python -m mypy sample tests --config-file ./mypy.ini
 echo
 
-echo "exec 'python -m pylint sample tests --rcfile=./.pylintrc'"
-python -m pylint sample tests --rcfile=./.pylintrc
-echo
-
 echo "exec 'python -m pytest tests -v --cov=sample --cov-branch'"
 python -m pytest tests -v --cov=sample --cov-branch
 echo
