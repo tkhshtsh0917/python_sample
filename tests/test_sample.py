@@ -1,13 +1,15 @@
-import click
+# pylint: disable=missing-module-docstring
+
 from click.testing import CliRunner
 
-from sample.__main__ import sum
+from sample.__main__ import add
 
 
-def test_sum():
+def test_add() -> None:
+    """test `add`"""
+
     runner = CliRunner()
-    actual = runner.invoke(sum, ["1", "2"])
+    actual = runner.invoke(add, ["1", "2"])
 
     assert actual.exit_code == 0
     assert actual.output == "3\n"
-

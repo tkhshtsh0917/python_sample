@@ -37,10 +37,13 @@ ENV PYTHONUNBUFFERED=1 \
 COPY --from=dev-builder /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/site-packages
 COPY ./sample /app/sample
 COPY ./tests /app/tests
+COPY ./.pylintrc /app/.pylintrc
+COPY ./mypy.ini /app/mypy.ini
+COPY ./.github/scripts/CI.sh /app/CI.sh
 
 WORKDIR /app
 
-ENTRYPOINT [ "python", "-m", "pytest" ]
+ENTRYPOINT [ "bash", "CI.sh" ]
 
 
 
