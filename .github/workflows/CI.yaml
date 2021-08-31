@@ -27,8 +27,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Build Docker Image For Production
-        run: docker build . --file Dockerfile --target production --tag python-sample-prod-image:latest
-
-      - name: Production Run
-        run: docker run --rm --name python-sample-prod-container python-sample-prod-image:latest 1 2
+      - name: Push To GitHub Container Registry
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          repository: tkhshtsh0917/python-sample-prod
+          tag_with_ref: true
